@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Category, Question, setup_db
 
 from flaskr.controllers import CategoryAPI, QuestionAPI
-
+from flaskr.utils import generic_error_message
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -24,7 +24,30 @@ def create_app(test_config=None):
 
     app.add_url_rule('/api/categories/', view_func=CategoryAPI.as_view('categories'))
     app.add_url_rule("/api/categories/<category_id>/questions/", view_func=QuestionAPI.as_view("questions"))
+
+    register_error_handlers(app)
     return app
+
+def register_error_handlers(app):
+    @app.errorhandler(400)
+    def handle_400(e):
+        # Bad Request
+        return generic_error_message(400, "bad request, invalid request message")
+
+    @app.errorhandler(404)
+    def handle_404(e):
+        # Not Found
+        return generic_error_message(404, "not found, the requested URL was not found on the server")
+
+    @app.errorhandler(422)
+    def handle_422(e):
+        # Unprocessable Entity
+        return generic_error_message(404, "unprocessable entity, data sent is incomplete/incorrect")
+
+    @app.errorhandler(500)
+    def handle_500(e):
+        # Server Error
+        return generic_error_message(500, "server error, we cannot process your request right now")
 
   '''
   @TODO: 
@@ -90,13 +113,3 @@ def create_app(test_config=None):
   one question at a time is displayed, the user is allowed to answer
   and shown whether they were correct or not. 
   '''
-
-  '''
-  @TODO: 
-  Create error handlers for all expected errors 
-  including 404 and 422. 
-  '''
-  
-  return app
-
-    
