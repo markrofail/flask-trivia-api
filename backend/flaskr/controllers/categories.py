@@ -1,10 +1,9 @@
 from flask import jsonify, views
 
-from models import Category
+from flaskr.services.categories import get_all_categories
 
 class CategoryAPI(views.MethodView):
 
     def get(self):
-        categories = Category.query.all()
-        return jsonify([category.format() for category in categories])
-
+        categories = get_all_categories(return_json=True)
+        return jsonify(categories)

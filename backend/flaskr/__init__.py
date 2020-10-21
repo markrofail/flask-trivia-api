@@ -7,9 +7,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from models import Category, Question, setup_db
 
-from flaskr.controllers.categories import CategoryAPI
-
-QUESTIONS_PER_PAGE = 10
+from flaskr.controllers import CategoryAPI, QuestionAPI
 
 def create_app(test_config=None):
     # create and configure the app
@@ -24,7 +22,8 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE')
         return response
 
-    app.add_url_rule('/categories/', view_func=CategoryAPI.as_view('categories'))
+    app.add_url_rule('/api/categories/', view_func=CategoryAPI.as_view('categories'))
+    app.add_url_rule("/api/categories/<category_id>/questions/", view_func=QuestionAPI.as_view("questions"))
     return app
 
   '''
