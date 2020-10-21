@@ -1,32 +1,31 @@
 import os
-from flask import Flask, request, abort, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 import random
 
-from models import setup_db, Question, Category
+from flask import Flask, abort, jsonify, request
+from flask.views import MethodView
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from models import Category, Question, setup_db
+
+from flaskr.controllers.categories import CategoryAPI
 
 QUESTIONS_PER_PAGE = 10
 
 def create_app(test_config=None):
-  # create and configure the app
-  app = Flask(__name__)
-  setup_db(app)
+    # create and configure the app
+    app = Flask(__name__)
+    setup_db(app)
 
-  CORS(app)
-  @app.after_request
-  def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE')
-    return response
+    CORS(app)
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE')
+        return response
 
-  '''
-  @TODO: 
-  Create an endpoint to handle GET requests 
-  for all available categories.
-  '''
-
+    app.add_url_rule('/categories/', view_func=CategoryAPI.as_view('categories'))
+    return app
 
   '''
   @TODO: 
