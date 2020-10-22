@@ -49,14 +49,20 @@ class Question(db.Model):
     db.session.delete(self)
     db.session.commit()
 
-  def format(self):
-    return {
-      'id': self.id,
-      'question': self.question,
-      'answer': self.answer,
-      'category': self.category,
-      'difficulty': self.difficulty
+  def format(self, details=False):
+    payload = {
+        'id': self.id,
+        'question': self.question,
     }
+
+    if details:
+      payload.update({
+          'answer': self.answer,
+          'category': self.category,
+          'difficulty': self.difficulty
+
+      })
+    return payload
 
 '''
 Category

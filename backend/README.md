@@ -63,7 +63,7 @@ One note before you delve into your tasks: for each endpoint you are expected to
    - ~~current category~~
    - ~~categories~~
 3. ~~Create an endpoint to handle GET requests for all available categories.~~
-4. Create an endpoint to DELETE question using a question ID. 
+4. ~~Create an endpoint to DELETE question using a question ID.~~
 5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score. 
 6. Create a POST endpoint to get questions based on category. 
 7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
