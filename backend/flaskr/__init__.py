@@ -7,7 +7,8 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from models import Category, Question, setup_db
 
-from flaskr.controllers import CategoryAPI, QuestionAPI
+from flaskr.controllers import categories_api, questions_api
+
 from flaskr.utils import generic_error_message
 def create_app(test_config=None):
     # create and configure the app
@@ -22,11 +23,13 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE')
         return response
 
-    app.add_url_rule('/api/categories/', view_func=CategoryAPI.as_view('categories'))
-    app.add_url_rule("/api/categories/<category_id>/questions/", view_func=QuestionAPI.as_view("questions"))
-
     register_error_handlers(app)
+    register_routes(app)
     return app
+
+def register_routes(app):
+    app.register_blueprint(questions_api, url_prefix='/api')
+    app.register_blueprint(categories_api, url_prefix='/api')
 
 def register_error_handlers(app):
     @app.errorhandler(400)
