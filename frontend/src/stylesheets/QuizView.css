@@ -5,6 +5,11 @@
     margin-top: 40px;
 }
 
+.category-item{
+    text-align: left;
+    margin-left: 2em;
+}
+
 .category-holder {
     margin-top: 16px;
     font-size: 24px;
@@ -44,4 +49,19 @@ div.button {
 
 .wrong {
     color: red;
+}
+
+.form-view {
+    text-align: center;
+    margin-left: 20%;
+}
+
+.form-view input, .form-view select  {
+    margin-left: 1em;
+    width: 300px;
+}
+
+.form-view input.button  {
+    margin-left: 0;
+    width: initial;
 }

@@ -15,13 +15,15 @@ class Question extends Component {
 
   render() {
     const { question, answer, category, difficulty } = this.props;
+    const imageUrl = category.type.toLowerCase() + '.svg'
+
     return (
       <div className="Question-holder">
         <div className="Question">{question}</div>
         <div className="Question-status">
-          <img className="category" src={`${category}.svg`}/>
+          <img className="category" alt="" src={imageUrl}/>
           <div className="difficulty">Difficulty: {difficulty}</div>
-          <img src="delete.png" className="delete" onClick={() => this.props.questionAction('DELETE')}/>
+          <img src="delete.png" alt="" className="delete" onClick={() => this.props.questionAction('DELETE')}/>
           
         </div>
         <div className="show-answer button"
