@@ -2,11 +2,31 @@ from flask import Blueprint, abort, jsonify, request
 from flaskr.serializers import question_schema
 from flaskr.services.categories import get_all_categories, get_category
 from flaskr.services.questions import (create_question, get_all_questions,
-                                       get_question, search_question_by_text)
+                                       get_question, search_question_by_text,
+                                       get_total_question_count)
 from marshmallow import ValidationError
 from models import Category, Question
 
 questions_api = Blueprint("questions", "")
+
+
+@questions_api.route("/questions")
+def get_all_question():
+    current_category = None
+    categories = get_all_categories(return_json=True)
+
+    page = request.args.get("page", 1, type=int)
+    questions = get_all_questions(page=page, return_json=True)
+    total_questions=get_total_question_count()
+
+    return jsonify(
+        dict(
+            current_category=current_category,
+            questions=questions,
+            total_questions=total_questions,
+            categories=categories,
+        )
+    )
 
 
 @questions_api.route("/categories/<category_id>/questions/")
@@ -16,12 +36,13 @@ def get_question_by_category(category_id):
 
     page = request.args.get("page", 1, type=int)
     questions = get_all_questions(category_id, page, return_json=True)
+    total_questions=get_total_question_count()
 
     return jsonify(
         dict(
             current_category=current_category,
             questions=questions,
-            question_count=len(questions),
+            total_questions=total_questions,
             categories=categories,
         )
     )
