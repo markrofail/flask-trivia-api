@@ -1,7 +1,9 @@
 from flask import Blueprint, abort, jsonify, request
+from flaskr.serializers import question_schema
 from flaskr.services.categories import get_all_categories, get_category
-from flaskr.services.questions import (get_all_questions, get_question,
-                                       search_question_by_text)
+from flaskr.services.questions import (create_question, get_all_questions,
+                                       get_question, search_question_by_text)
+from marshmallow import ValidationError
 from models import Category, Question
 
 questions_api = Blueprint("questions", "")
@@ -29,6 +31,21 @@ def get_question_by_category(category_id):
 def get_question_detail(question_id):
     question = get_question(question_id, return_json=True)
     return jsonify(dict(question=question, success=True))
+
+
+@questions_api.route("/questions", methods=["POST"])
+def add_question():
+    json_data = request.get_json()
+    if not json_data:
+        abort(400)
+
+    try:
+        data = question_schema.load(json_data)
+    except ValidationError as err:
+        abort(422)
+
+    question = create_question(data)
+    return jsonify(question=question_schema.dump(question), success=True)
 
 
 @questions_api.route("/questions/<question_id>", methods=["DELETE"])

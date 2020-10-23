@@ -5,7 +5,7 @@ QUESTIONS_PER_PAGE = 10
 
 def get_all_questions(category_id, page=1, return_json=False):
     questions = (
-        Question.query.filter_by(category=category_id)
+        Question.query.filter_by(category_id=category_id)
         .paginate(page, QUESTIONS_PER_PAGE, False)
         .items
     )
@@ -31,3 +31,8 @@ def search_question_by_text(search_query, return_json=False):
     if return_json:
         questions = [q.format() for q in questions]
     return questions
+
+def create_question(data):
+    question = Question(**data)
+    question.insert()
+    return question

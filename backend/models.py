@@ -1,8 +1,10 @@
 import json
 import os
 
+from flask import abort
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
+from sqlalchemy import Column, ForeignKey, Integer, String, create_engine, func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import relationship
 
 database_name = "trivia"
@@ -39,7 +41,6 @@ class Category(db.Model):
     def format(self):
         return {"id": self.id, "type": self.type}
 
-
 class Question(db.Model):
     __tablename__ = "questions"
 
@@ -51,22 +52,28 @@ class Question(db.Model):
     category_id = Column(Integer, ForeignKey("categories.id"))
     category = relationship(Category, back_populates="questions")
 
-    def __init__(self, question, answer, category, difficulty):
-        self.question = question
-        self.answer = answer
-        self.category = category
-        self.difficulty = difficulty
-
     def insert(self):
-        db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except IntegrityError as exec:
+            db.session.rollback()
+            abort(500)
 
     def update(self):
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError as exec:
+            db.session.rollback()
+            abort(500)
 
     def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except IntegrityError as exec:
+            db.session.rollback()
+            abort(500)
 
     def format(self, details=False):
         payload = {

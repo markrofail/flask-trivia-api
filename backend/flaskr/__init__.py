@@ -8,28 +8,38 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Category, Question, setup_db
 
 from flaskr.controllers import categories_api, questions_api
-
 from flaskr.utils import generic_error_message
+
+from flaskr.serializers import ma
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
 
     CORS(app)
+    ma.init_app(app)
+
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE')
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type,Authorization"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE"
+        )
         return response
 
     register_error_handlers(app)
     register_routes(app)
     return app
 
+
 def register_routes(app):
-    app.register_blueprint(questions_api, url_prefix='/api')
-    app.register_blueprint(categories_api, url_prefix='/api')
+    app.register_blueprint(questions_api, url_prefix="/api/v1")
+    app.register_blueprint(categories_api, url_prefix="/api/v1")
+
 
 def register_error_handlers(app):
     @app.errorhandler(400)
@@ -40,17 +50,24 @@ def register_error_handlers(app):
     @app.errorhandler(404)
     def handle_404(e):
         # Not Found
-        return generic_error_message(404, "not found, the requested URL was not found on the server")
+        return generic_error_message(
+            404, "not found, the requested URL was not found on the server"
+        )
 
     @app.errorhandler(422)
     def handle_422(e):
         # Unprocessable Entity
-        return generic_error_message(404, "unprocessable entity, data sent is incomplete/incorrect")
+        return generic_error_message(
+            422, "unprocessable entity, data sent is incomplete/incorrect"
+        )
 
     @app.errorhandler(500)
     def handle_500(e):
         # Server Error
-        return generic_error_message(500, "server error, we cannot process your request right now")
+        return generic_error_message(
+            500, "server error, we cannot process your request right now"
+        )
+
 
   '''
   @TODO: 
