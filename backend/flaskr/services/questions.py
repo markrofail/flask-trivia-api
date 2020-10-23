@@ -3,12 +3,16 @@ from models import Question
 QUESTIONS_PER_PAGE = 10
 
 
-def get_all_questions(category_id, page=1, return_json=False):
-    questions = (
-        Question.query.filter_by(category_id=category_id)
-        .paginate(page, QUESTIONS_PER_PAGE, False)
-        .items
-    )
+def get_all_questions(category_id=None, page=None, return_json=False):
+    queryset = Question.query
+    
+    if category_id:
+        queryset = queryset.filter_by(category_id=category_id)
+    
+    if page:
+        questions = queryset.paginate(page, QUESTIONS_PER_PAGE, False).items
+    else:
+        questions = queryset.all()
 
     if return_json:
         questions = [q.format() for q in questions]

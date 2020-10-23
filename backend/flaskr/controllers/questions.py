@@ -27,6 +27,14 @@ def get_question_by_category(category_id):
     )
 
 
+@questions_api.route("/questions/by-category", methods=["POST"])
+def get_question_by_category_():
+    json_data = request.get_json()
+    category_id = json_data.get("category_id", None)
+    questions = get_all_questions(category_id, return_json=True)
+    return jsonify(questions)
+
+
 @questions_api.route("/questions/<question_id>", methods=["GET"])
 def get_question_detail(question_id):
     question = get_question(question_id, return_json=True)
