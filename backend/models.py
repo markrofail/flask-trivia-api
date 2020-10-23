@@ -85,7 +85,7 @@ class Question(db.Model):
             payload.update(
                 {
                     "answer": self.answer,
-                    "category": self.category,
+                    "category": self.category_id,
                     "difficulty": self.difficulty,
                 }
             )

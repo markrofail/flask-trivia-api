@@ -5,6 +5,6 @@ categories_api = Blueprint("categories", "")
 
 
 @categories_api.route('/categories')
-def list_categories(self):
+def list_categories():
     categories = get_all_categories(return_json=True)
     return jsonify(categories)
