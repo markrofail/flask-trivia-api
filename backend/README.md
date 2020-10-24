@@ -79,10 +79,33 @@ Read more [here](./API_DOCS.md)
 ## Testing
 
 To run the tests, run
+the db will be automatically created and loaded with the trivia.psql dump, no extra steps
 
 ```sh
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
-python test_flaskr.py
+cd backend
+nosetests -sv
+```
+
+you should get the following output
+
+```sh
+❯ nosetests -sv
+Categories List: list all available categories ... ok
+Question Create: create a question ... ok
+Question Create: create a question with invalid category id ... ok
+Question Create: create a question with invalid difficulty ... ok
+Question Delete: delete a question ... ok
+Question Detail: get details about one question ... ok
+Question List ALL: list all available questions ... ok
+Question List ALL paginated: list all available questions in page 2 ... ok
+Question List ByCategory: list all available questions in a category ... ok
+Question List ByCategory (alternative): list all available questions in a category ... ok
+Question Search: search for question by text ... ok
+Quiz Turn: paly a quiz turn ... ok
+Quiz Turn: end a quiz turn ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.260s
+
+OK
 ```

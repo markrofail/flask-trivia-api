@@ -5,18 +5,19 @@ from flask import Flask, abort, jsonify, request
 from flask.views import MethodView
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from models import Category, Question, setup_db
 
 from flaskr.controllers import categories_api, questions_api, quizzes_api
 from flaskr.serializers import ma
 from flaskr.utils import generic_error_message
+from models import db
 
 
-def create_app(test_config=None):
+def create_app(config_path="flaskr.config.local"):
     # create and configure the app
-    app = Flask(__name__)
-    setup_db(app)
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object(config_path)
 
+    db.init_app(app)
     CORS(app)
     ma.init_app(app)
 
