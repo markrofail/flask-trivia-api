@@ -5,10 +5,10 @@ QUESTIONS_PER_PAGE = 10
 
 def get_all_questions(category_id=None, page=None, return_json=False):
     queryset = Question.query
-    
+
     if category_id:
         queryset = queryset.filter_by(category_id=category_id)
-    
+
     if page:
         questions = queryset.paginate(page, QUESTIONS_PER_PAGE, False).items
     else:
@@ -36,10 +36,12 @@ def search_question_by_text(search_query, return_json=False):
         questions = [q.format() for q in questions]
     return questions
 
+
 def create_question(data):
     question = Question(**data)
     question.insert()
     return question
+
 
 def get_total_question_count():
     return db.session.query(func.count(Question.id)).scalar()

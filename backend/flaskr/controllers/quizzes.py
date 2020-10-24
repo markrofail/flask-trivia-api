@@ -1,4 +1,5 @@
-from flask import Blueprint, abort, jsonify, request
+from flask import Blueprint, jsonify, request
+
 from flaskr.services.quizzes import play_quiz_turn
 
 quizzes_api = Blueprint("quizzes", "")
@@ -19,6 +20,6 @@ def play_quiz():
         next_question = play_quiz_turn(
             category_id=category_id,
             previous_questions=previous_questions,
-            return_json=True
+            return_json=True,
         )
     return jsonify(question=next_question)
